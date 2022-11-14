@@ -1,0 +1,51 @@
+@layout('layouts/app')
+
+@section('content')
+
+  <div>
+    <h1>User Management</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Joined</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @each (user in users)
+          <tr>
+            <td>
+              {{ user.email }}
+              @if (user.id === auth.user?.id)
+                (you)
+              @endif
+            </td>
+            <th>
+              <form action="{{ route('users.role', { id: user.id }, { qs: { _method: 'PATCH' }}) }}" method="POST">
+                <select name="roleId" onchange="this.parentElement.submit()">
+                  @each (role in roles)
+                    <option value="{{ role.id }}" {{ role.id === user.roleId ? 'selected' : '' }}>
+                      {{ role.name }}
+                    </option>
+                  @endeach
+                </select>
+              </form>
+            </th>
+            <th>{{ user.createdAt.toLocaleString() }}</th>
+            <th>
+              <form action="{{ route('users.destroy', { id: user.id }, { qs: { _method: 'DELETE' }}) }}" method="POST">
+                <button type="button" onclick="confirm('Are you sure you want to delete this user?') && this.parentElement.submit()">
+                  Delete
+                </button>
+              </form>
+            </th>
+          </tr>
+        @endeach
+      </tbody>
+    </table>
+  </div>
+
+@endsection

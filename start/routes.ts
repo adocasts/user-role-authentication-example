@@ -27,3 +27,11 @@ Route.get('/', async ({ view }) => {
 Route.post('/auth/register', 'AuthController.register').as('auth.register')
 Route.post('/auth/login', 'AuthController.login').as('auth.login')
 Route.get('/auth/logout', 'AuthController.logout').as('auth.logout')
+
+Route.group(() => {
+  
+  Route.get('/manage', 'UsersController.manage').as('manage')
+  Route.patch('/:id/role', 'UsersController.role').as('role')
+  Route.delete('/:id', 'UsersController.destroy').as('destroy')
+
+}).prefix('users').as('users').middleware(['auth', 'role:admin'])
