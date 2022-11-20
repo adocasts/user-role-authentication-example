@@ -17,6 +17,7 @@ import Env from '@ioc:Adonis/Core/Env'
 export default Env.rules({
 	HOST: Env.schema.string({ format: 'host' }),
 	PORT: Env.schema.number(),
+	DOMAIN: Env.schema.string(),
 	APP_KEY: Env.schema.string(),
 	APP_NAME: Env.schema.string(),
 	CACHE_VIEWS: Env.schema.boolean(),
@@ -30,4 +31,9 @@ export default Env.rules({
 	PG_USER: Env.schema.string(),
 	PG_PASSWORD: Env.schema.string.optional(),
 	PG_DB_NAME: Env.schema.string(),
+
+	SMTP_HOST: Env.schema.string({ format: 'host' }),
+	SMTP_PORT: Env.schema.number(),
+	SMTP_USERNAME: Env.schema.string(),
+	SMTP_PASSWORD: Env.schema.string(),
 })

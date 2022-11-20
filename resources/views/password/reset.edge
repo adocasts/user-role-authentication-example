@@ -1,0 +1,29 @@
+@layout('layouts/app')
+
+@section('content')
+
+  <div class="column">
+    {{ inspect(flashMessages.all()) }}
+
+    <h1>Reset Your Password</h1>
+    
+    @if (isValid)
+      <p>
+        Enter your new password below
+      </p>
+
+      <form method="POST" action="{{ route('password.store') }}">
+        <input type="hidden" name="token" value="{{ token }}" />
+        <input type="password" name="password" placeholder="Enter your new password" />
+        <button type="submit">
+          Reset Password
+        </button>
+      </form>
+    @else
+      <p>
+        Your token is invalid or expired. <a href="{{ route('password.forgot') }}">Please try again</a>
+      </p>
+    @endif
+  </div>
+
+@endsection

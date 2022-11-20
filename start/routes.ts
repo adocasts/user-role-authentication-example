@@ -28,6 +28,11 @@ Route.post('/auth/register', 'AuthController.register').as('auth.register')
 Route.post('/auth/login', 'AuthController.login').as('auth.login')
 Route.get('/auth/logout', 'AuthController.logout').as('auth.logout')
 
+Route.get('/password/forgot', 'PasswordResetController.forgot').as('password.forgot')
+Route.post('/password/send', 'PasswordResetController.send').as('password.send')
+Route.get('/password/reset/:token', 'PasswordResetController.reset').as('password.reset')
+Route.post('/password/store', 'PasswordResetController.store').as('password.store')
+
 Route.group(() => {
   
   Route.get('/manage', 'UsersController.manage').as('manage')

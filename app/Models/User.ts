@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, belongsTo, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, belongsTo, BelongsTo, computed, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Roles from 'App/Enums/Roles'
+import Token from './Token'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -33,6 +34,14 @@ export default class User extends BaseModel {
 
   @belongsTo(() => Role)
   public role: BelongsTo<typeof Role>
+
+  @hasMany(() => Token)
+  public tokens: HasMany<typeof Token>
+
+  @hasMany(() => Token, {
+    onQuery: query => query.where('type', 'PASSWORD_RESET')
+  })
+  public passwordResetTokens: HasMany<typeof Token>
 
   @beforeSave()
   public static async hashPassword (user: User) {

@@ -1,0 +1,21 @@
+@layout('layouts/app')
+
+@section('content')
+
+  <div class="column">
+    {{ inspect(flashMessages.all()) }}
+
+    <h1>Reset Your Password</h1>
+    <p>
+      Enter you email below and we'll send you a password reset link
+    </p>
+
+    <form method="POST" action="{{ route('password.send') }}">
+      <input type="email" name="email" placeholder="Enter your email" />
+      <button type="submit">
+        Reset Password
+      </button>
+    </form>
+  </div>
+
+@endsection
