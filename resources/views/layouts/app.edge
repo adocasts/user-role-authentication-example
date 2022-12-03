@@ -88,6 +88,12 @@
   </style>
 </head>
 <body>
+  @if (nonVerifiedEmail)
+    <p>
+      Please verify your email by <a href="{{ route('verify.email') }}">clicking here</a>
+    </p>
+  @endif
+
   <main>
     @!section('content')
   </main>

@@ -24,9 +24,16 @@ Route.get('/', async ({ view }) => {
   return view.render('welcome')
 })
 
+Route.get('/test', async ({ view }) => {
+  return view.render('test')
+}).middleware(['verifyEmail'])
+
 Route.post('/auth/register', 'AuthController.register').as('auth.register')
 Route.post('/auth/login', 'AuthController.login').as('auth.login')
 Route.get('/auth/logout', 'AuthController.logout').as('auth.logout')
+
+Route.get('/verify/email', 'VerifyEmailController.index').as('verify.email').middleware(['auth'])
+Route.get('/verify/email/:token', 'VerifyEmailController.verify').as('verify.email.verify')
 
 Route.get('/password/forgot', 'PasswordResetController.forgot').as('password.forgot')
 Route.post('/password/send', 'PasswordResetController.send').as('password.send')

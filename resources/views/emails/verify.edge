@@ -1,0 +1,14 @@
+@layout('layouts/app')
+
+@section('content')
+
+  <div class="column">
+    {{ inspect(flashMessages.all()) }}
+
+    <h1>Please Verify Your Email</h1>
+    <p>
+      We've send you an email with a link to verify your email, please click that link to continue.
+    </p>
+  </div>
+
+@endsection

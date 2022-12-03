@@ -4,6 +4,7 @@ import { column, beforeSave, BaseModel, belongsTo, BelongsTo, computed, hasMany,
 import Role from './Role'
 import Roles from 'App/Enums/Roles'
 import Token from './Token'
+import VerifyEmail from 'App/Mailers/VerifyEmail'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -20,6 +21,9 @@ export default class User extends BaseModel {
 
   @column()
   public rememberMeToken: string | null
+
+  @column()
+  public isEmailVerified: boolean = false
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -43,10 +47,20 @@ export default class User extends BaseModel {
   })
   public passwordResetTokens: HasMany<typeof Token>
 
+  @hasMany(() => Token, {
+    onQuery: query => query.where('type', 'VERIFY_EMAIL')
+  })
+  public verifyEmailTokens: HasMany<typeof Token>
+
   @beforeSave()
   public static async hashPassword (user: User) {
     if (user.$dirty.password) {
       user.password = await Hash.make(user.password)
     }
+  }
+
+  public async sendVerifyEmail() {
+    const token = await Token.generateVerifyEmailToken(this)
+    await new VerifyEmail(this, token).sendLater()
   }
 }

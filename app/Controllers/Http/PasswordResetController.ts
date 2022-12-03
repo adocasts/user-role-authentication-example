@@ -37,7 +37,7 @@ export default class PasswordResetController {
 
   public async reset({ view, params }: HttpContextContract) {
     const token = params.token
-    const isValid = await Token.verify(token)
+    const isValid = await Token.verify(token, 'PASSWORD_RESET')
 
     return view.render('password/reset', { isValid, token })
   }
@@ -49,7 +49,7 @@ export default class PasswordResetController {
     })
 
     const { token, password } = await request.validate({ schema: passwordSchema })
-    const user = await Token.getPasswordResetUser(token)
+    const user = await Token.getTokenUser(token, 'PASSWORD_RESET')
 
     if (!user) {
       session.flash('error', 'Token expired or associated user could not be found')
@@ -58,7 +58,7 @@ export default class PasswordResetController {
 
     await user.merge({ password }).save()
     await auth.login(user)
-    await Token.expirePasswordResetTokens(user)
+    await Token.expireTokens(user, 'passwordResetTokens')
 
     return response.redirect().toPath('/')
   }

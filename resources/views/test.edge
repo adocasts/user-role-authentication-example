@@ -1,0 +1,19 @@
+@layout('layouts/app')
+
+@section('content')
+
+  <div class="column">
+    {{ inspect(flashMessages.all()) }}
+
+    @if (auth.user)
+      @if (nonVerifiedEmail)
+        <h1>You're Email Is NOT Verified</h1>
+      @else
+        <h1>You're Email Is Verified</h1>
+      @endif
+    @else
+      <h1>You're Not Authenticated</h1>
+    @endif
+  </div>
+
+@endsection

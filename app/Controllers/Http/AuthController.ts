@@ -13,6 +13,7 @@ export default class AuthController {
     const user = await User.create(data)
 
     await auth.login(user)
+    await user.sendVerifyEmail()
 
     return response.redirect().toPath('/')
   }
@@ -25,6 +26,12 @@ export default class AuthController {
     } catch (_error) {
       session.flash('errors', 'Email or password is incorrect')
       return response.redirect().back()
+    }
+
+    if (auth.user && session.has('isVerifyingEmail')) {
+      // verify their email
+      auth.user.isEmailVerified = true
+      await auth.user.save()
     }
 
     return response.redirect().toPath('/')
